@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ajcreates.dev/learn-card-magic/sitemap-index.xml
+Sitemap: https://ajcreates.dev/learn-card-magic/sitemap.xml

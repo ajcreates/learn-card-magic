@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+
+const BASE = 'https://ajcreates.dev/learn-card-magic';
+
+const tutorials = await getCollection('tutorials');
+const posts = await getCollection('blog');
+const videos = await getCollection('videos');
+
+const now = new Date().toISOString();
+
+const pages = [
+  { url: `${BASE}/`, priority: '1.0', changefreq: 'weekly' },
+  { url: `${BASE}/tutorials/`, priority: '0.9', changefreq: 'weekly' },
+  { url: `${BASE}/videos/`, priority: '0.9', changefreq: 'daily' },
+  { url: `${BASE}/blog/`, priority: '0.8', changefreq: 'weekly' },
+  ...tutorials.map(t => ({ url: `${BASE}/tutorials/${t.slug}/`, priority: '0.7', changefreq: 'monthly', lastmod: t.data.publishedAt })),
+  ...posts.map(p => ({ url: `${BASE}/blog/${p.slug}/`, priority: '0.7', changefreq: 'monthly', lastmod: p.data.publishedAt })),
+  ...videos.map(v => ({ url: `${BASE}/videos/${v.id.replace(/\.yaml$/, '')}/`, priority: '0.6', changefreq: 'weekly', lastmod: v.data.publishedAt })),
+];
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {pages.map(p => (
+    <url>
+      <loc>{p.url}</loc>
+      <lastmod>{p.lastmod || now.slice(0,10)}</lastmod>
+      <changefreq>{p.changefreq}</changefreq>
+      <priority>{p.priority}</priority>
+    </url>
+  ))}
+</urlset>
