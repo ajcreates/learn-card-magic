@@ -1,0 +1,41 @@
+# AJCreates — Learn Card Magic
+# https://ajcreates.dev/learn-card-magic
+# This file follows the llms.txt standard for AI agent discoverability.
+
+> A comprehensive resource for learning card magic — step-by-step tutorials, video demonstrations, and articles covering beginner to advanced techniques.
+
+## About
+- Author: AJCreates
+- Website: https://ajcreates.dev/learn-card-magic
+- YouTube: https://www.youtube.com/@ajcreates
+
+## Sections
+
+### Tutorials
+Step-by-step written guides for card tricks and sleight of hand.
+- /learn-card-magic/tutorials/ — All tutorials, organised by difficulty
+- /learn-card-magic/tutorials/ambitious-card/ — The Ambitious Card (Beginner)
+- /learn-card-magic/tutorials/double-lift/ — The Double Lift (Beginner)
+- /learn-card-magic/tutorials/card-to-impossible-location/ — Card to Impossible Location (Intermediate)
+- /learn-card-magic/tutorials/one-handed-riffle-shuffle/ — One-Handed Riffle Shuffle (Advanced)
+
+### Video Gallery
+Video demonstrations and tutorials, sourced from YouTube.
+- /learn-card-magic/videos/ — Full gallery with search, filter, and sort
+- /learn-card-magic/videos/ambitious-card-tutorial/ — Ambitious Card Full Tutorial
+- /learn-card-magic/videos/double-lift-masterclass/ — Double Lift Masterclass
+- /learn-card-magic/videos/card-to-impossible-location/ — Card to Impossible Location
+- /learn-card-magic/videos/one-handed-riffle-shuffle/ — One-Handed Riffle Shuffle in 4 Weeks
+- /learn-card-magic/videos/3-card-tricks-5-minutes/ — 3 Mind-Blowing Card Tricks in 5 Minutes
+- /learn-card-magic/videos/charlier-cut-tutorial/ — The Charlier Cut Tutorial
+
+### Blog
+Articles on card magic theory, psychology, gear, and performance.
+- /learn-card-magic/blog/ — All posts
+- /learn-card-magic/blog/5-tricks-every-beginner-should-learn/ — The 5 Card Tricks Every Beginner Should Learn First
+- /learn-card-magic/blog/psychology-of-card-magic/ — The Psychology of Card Magic
+- /learn-card-magic/blog/how-to-choose-your-first-deck/ — How to Choose Your First Deck of Cards
+
+## Machine-readable data
+- /learn-card-magic/sitemap-index.xml — Full sitemap
+- /learn-card-magic/robots.txt — Crawl rules

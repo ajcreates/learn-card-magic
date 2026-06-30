@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoGallery from '../../components/VideoGallery.astro';
+import { getCollection } from 'astro:content';
+import { BASE } from '../../lib/base';
+
+const rawVideos = await getCollection('videos');
+const videos = rawVideos
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+  .map(v => ({
+    slug: v.id.replace(/\.yaml$/, ''),
+    youtubeId: v.data.youtubeId,
+    title: v.data.title,
+    description: v.data.description,
+    tags: v.data.tags,
+    difficulty: v.data.difficulty,
+    viewCount: v.data.viewCount,
+    publishedAt: v.data.publishedAt,
+  }));
+
+const schema = {
+  "@type": "CollectionPage",
+  "@id": `https://ajcreates.dev${BASE}/videos/#webpage`,
+  "url": `https://ajcreates.dev${BASE}/videos/`,
+  "name": "Card Magic Video Gallery",
+  "description": "Watch card magic tutorials and performances by AJCreates. Filter by difficulty, sort by views, and search by trick name.",
+  "isPartOf": { "@id": `https://ajcreates.dev${BASE}/#website` },
+};
+---
+
+<BaseLayout
+  title="Video Gallery"
+  description="Watch all AJCreates card magic videos — filter by difficulty, sort by views or date, and search by trick or technique."
+  schema={schema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-16">
+      <h1 class="font-display text-5xl font-black text-white mb-4">Video Gallery</h1>
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+        Watch, learn, and be amazed. All {videos.length} videos in one place — searchable, sortable, filterable.
+      </p>
+    </div>
+    <VideoGallery videos={videos} />
+  </div>
+</BaseLayout>

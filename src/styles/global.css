@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-dark-900 text-gray-100 font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-dark-900 font-semibold px-6 py-3 rounded-lg transition-colors duration-200;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 border border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-dark-900 font-semibold px-6 py-3 rounded-lg transition-colors duration-200;
+  }
+  .card {
+    @apply bg-dark-800 border border-dark-600 rounded-xl overflow-hidden hover:border-brand-500 transition-colors duration-200;
+  }
+  .tag {
+    @apply inline-block bg-dark-700 text-gray-300 text-xs font-medium px-2 py-1 rounded-full;
+  }
+  .tag-difficulty-beginner {
+    @apply bg-green-900/50 text-green-400 border border-green-700/50;
+  }
+  .tag-difficulty-intermediate {
+    @apply bg-yellow-900/50 text-yellow-400 border border-yellow-700/50;
+  }
+  .tag-difficulty-advanced {
+    @apply bg-red-900/50 text-red-400 border border-red-700/50;
+  }
+}

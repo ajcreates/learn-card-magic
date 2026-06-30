@@ -1,0 +1,166 @@
+---
+import '../styles/global.css';
+import { BASE } from '../lib/base';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'video';
+  canonical?: string;
+  schema?: object;
+}
+
+const SITE_URL = 'https://ajcreates.dev';
+const FULL_BASE = `${SITE_URL}${BASE}`;
+
+const {
+  title,
+  description = 'Learn card magic from AJCreates — step-by-step tutorials, videos, and blog posts on card tricks for all skill levels.',
+  image = `${BASE}/og-default.jpg`,
+  type = 'website',
+  canonical = Astro.url.href,
+  schema,
+} = Astro.props;
+
+const fullTitle = title === 'Home' ? 'AJCreates | Learn Card Magic' : `${title} | AJCreates Card Magic`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary SEO -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${SITE_URL}${image}`} />
+    <meta property="og:site_name" content="AJCreates Card Magic" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ajcreates" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE_URL}${image}`} />
+
+    <!-- Structured Data: WebSite + Person -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": `${FULL_BASE}/#website`,
+          "url": FULL_BASE,
+          "name": "AJCreates Card Magic",
+          "description": "Learn card magic with step-by-step tutorials, video demonstrations, and expert blog posts.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": `${FULL_BASE}/videos?search={search_term_string}`,
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": `${FULL_BASE}/#person`,
+          "name": "AJCreates",
+          "url": "https://ajcreates.dev",
+          "sameAs": [
+            "https://www.youtube.com/@ajcreates",
+            "https://x.com/ajcreates"
+          ]
+        },
+        ...(schema ? [schema] : [])
+      ]
+    })} />
+
+    <!-- Favicon placeholder -->
+    <link rel="icon" type="image/svg+xml" href={`${BASE}/favicon.svg`} />
+
+    <!-- Alpine.js -->
+    <script>
+      import Alpine from 'alpinejs';
+      window.Alpine = Alpine;
+      Alpine.start();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur border-b border-dark-700">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href={BASE + '/'} class="font-display text-xl font-bold text-brand-500 hover:text-brand-400 transition-colors">
+          🃏 AJCreates
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href={BASE + '/tutorials'} class="text-gray-300 hover:text-white transition-colors">Tutorials</a>
+          <a href={BASE + '/videos'} class="text-gray-300 hover:text-white transition-colors">Videos</a>
+          <a href={BASE + '/blog'} class="text-gray-300 hover:text-white transition-colors">Blog</a>
+        </div>
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white" aria-label="Toggle menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </nav>
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-dark-700 bg-dark-900">
+        <div class="px-4 py-4 flex flex-col gap-4">
+          <a href={BASE + '/tutorials'} class="text-gray-300 hover:text-white transition-colors">Tutorials</a>
+          <a href={BASE + '/videos'} class="text-gray-300 hover:text-white transition-colors">Videos</a>
+          <a href={BASE + '/blog'} class="text-gray-300 hover:text-white transition-colors">Blog</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-700 bg-dark-800 mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <div class="font-display text-xl font-bold text-brand-500 mb-3">🃏 AJCreates</div>
+            <p class="text-gray-400 text-sm">Learn the art of card magic — from beginner flourishes to mind-bending illusions.</p>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold mb-3">Explore</h3>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href={BASE + '/tutorials'} class="hover:text-brand-500 transition-colors">Tutorials</a></li>
+              <li><a href={BASE + '/videos'} class="hover:text-brand-500 transition-colors">Video Gallery</a></li>
+              <li><a href={BASE + '/blog'} class="hover:text-brand-500 transition-colors">Blog</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold mb-3">Follow</h3>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="https://www.youtube.com/@ajcreates" target="_blank" rel="noopener" class="hover:text-brand-500 transition-colors">YouTube</a></li>
+              <li><a href="https://x.com/ajcreates" target="_blank" rel="noopener" class="hover:text-brand-500 transition-colors">X (Twitter)</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-dark-700 text-center text-gray-500 text-sm">
+          <p>© {new Date().getFullYear()} AJCreates. All rights reserved.</p>
+          <p class="mt-1"><a href={BASE + '/sitemap-index.xml'} class="hover:text-brand-500 transition-colors">Sitemap</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+    </script>
+  </body>
+</html>

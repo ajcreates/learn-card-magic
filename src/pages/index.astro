@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TutorialCard from '../components/TutorialCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+import { BASE } from '../lib/base';
+
+const tutorials = (await getCollection('tutorials'))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+  .slice(0, 3);
+
+const videos = (await getCollection('videos'))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+  .slice(0, 3);
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+  .slice(0, 3);
+
+const totalTutorials = (await getCollection('tutorials')).length;
+const totalVideos = (await getCollection('videos')).length;
+const totalPosts = (await getCollection('blog')).length;
+
+const homeSchema = {
+  "@type": "WebPage",
+  "@id": "https://ajcreates.dev/learn-card-magic/#webpage",
+  "url": "https://ajcreates.dev/learn-card-magic/",
+  "name": "AJCreates | Learn Card Magic",
+  "isPartOf": { "@id": "https://ajcreates.dev/learn-card-magic/#website" },
+  "about": { "@id": "https://ajcreates.dev/learn-card-magic/#person" },
+};
+---
+
+<BaseLayout
+  title="Home"
+  description="Learn card magic from AJCreates — step-by-step tutorials, video demonstrations, and expert articles on card tricks for all skill levels."
+  schema={homeSchema}
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-24 sm:py-32 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-dark-900 to-dark-900 pointer-events-none"></div>
+    <!-- Decorative cards -->
+    <div class="absolute top-10 right-10 text-8xl opacity-10 rotate-12 select-none pointer-events-none">🃏</div>
+    <div class="absolute bottom-10 left-10 text-6xl opacity-10 -rotate-12 select-none pointer-events-none">♠️</div>
+
+    <div class="relative max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 text-brand-500 text-sm px-4 py-2 rounded-full mb-6">
+        ✨ New tutorials every week
+      </div>
+      <h1 class="font-display text-5xl sm:text-7xl font-black text-white mb-6 leading-tight">
+        Learn the Art of<br /><span class="text-brand-500">Card Magic</span>
+      </h1>
+      <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+        Step-by-step tutorials, video demonstrations, and expert guides — for beginners to advanced cardicians.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href={BASE + '/tutorials'} class="btn-primary text-lg px-8 py-4">
+          🎓 Learn a Trick
+        </a>
+        <a href={BASE + '/videos'} class="btn-secondary text-lg px-8 py-4">
+          🎬 Watch Videos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats strip -->
+  <section class="border-y border-dark-700 bg-dark-800/50">
+    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-3 gap-4 text-center">
+      <div>
+        <div class="font-display text-3xl font-black text-brand-500">{totalTutorials}</div>
+        <div class="text-gray-400 text-sm mt-1">Tutorials</div>
+      </div>
+      <div>
+        <div class="font-display text-3xl font-black text-brand-500">{totalVideos}</div>
+        <div class="text-gray-400 text-sm mt-1">Videos</div>
+      </div>
+      <div>
+        <div class="font-display text-3xl font-black text-brand-500">{totalPosts}</div>
+        <div class="text-gray-400 text-sm mt-1">Articles</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Tutorials -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-white">Featured Tutorials</h2>
+        <p class="text-gray-400 mt-1">Pick a trick and start learning today</p>
+      </div>
+      <a href={BASE + '/tutorials'} class="text-brand-500 hover:text-brand-400 transition-colors text-sm font-medium hidden sm:block">
+        View all tutorials →
+      </a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tutorials.map(t => (
+        <TutorialCard
+          id={t.id}
+          title={t.data.title}
+          description={t.data.description}
+          tags={t.data.tags}
+          difficulty={t.data.difficulty}
+          slug={t.slug}
+        />
+      ))}
+    </div>
+    <div class="mt-8 text-center sm:hidden">
+      <a href={BASE + '/tutorials'} class="btn-secondary">View all tutorials →</a>
+    </div>
+  </section>
+
+  <!-- Latest Videos -->
+  <section class="bg-dark-800/30 border-y border-dark-700 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-white">Latest Videos</h2>
+          <p class="text-gray-400 mt-1">Watch, learn, and be amazed</p>
+        </div>
+        <a href={BASE + '/videos'} class="text-brand-500 hover:text-brand-400 transition-colors text-sm font-medium hidden sm:block">
+          Full gallery →
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {videos.map(v => (
+          <VideoCard
+            youtubeId={v.data.youtubeId}
+            title={v.data.title}
+            description={v.data.description}
+            tags={v.data.tags}
+            difficulty={v.data.difficulty}
+            viewCount={v.data.viewCount}
+            publishedAt={v.data.publishedAt}
+            slug={v.data.slug}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Blog Posts -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-white">From the Blog</h2>
+        <p class="text-gray-400 mt-1">Theory, tips, and insights on card magic</p>
+      </div>
+      <a href={BASE + '/blog'} class="text-brand-500 hover:text-brand-400 transition-colors text-sm font-medium hidden sm:block">
+        Read all posts →
+      </a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map(p => (
+        <BlogCard
+          title={p.data.title}
+          description={p.data.description}
+          tags={p.data.tags}
+          publishedAt={p.data.publishedAt}
+          readTime={p.data.readTime}
+          slug={p.slug}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- About strip -->
+  <section class="bg-gradient-to-r from-brand-900/20 via-dark-800/50 to-brand-900/20 border-y border-dark-700 py-20">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <div class="text-6xl mb-6">🃏</div>
+      <h2 class="font-display text-3xl font-bold text-white mb-4">Hi, I'm AJCreates</h2>
+      <p class="text-gray-400 text-lg leading-relaxed mb-8">
+        I've been obsessed with card magic for years. This site is my way of sharing everything I've learned — from the first beginner flourish to advanced sleight of hand. Whether you're picking up a deck for the first time or looking to take your skills to the next level, you're in the right place.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="https://www.youtube.com/@ajcreates" target="_blank" rel="noopener" class="btn-primary">
+          Subscribe on YouTube
+        </a>
+        <a href={BASE + '/blog'} class="btn-secondary">Read the Blog</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

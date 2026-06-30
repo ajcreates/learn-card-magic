@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { BASE } from '../../lib/base';
+
+export async function getStaticPaths() {
+  const tutorials = await getCollection('tutorials');
+  return tutorials.map(t => ({ params: { slug: t.slug }, props: { tutorial: t } }));
+}
+
+const { tutorial } = Astro.props;
+const { Content } = await tutorial.render();
+const { title, description, difficulty, tags, duration, publishedAt, youtubeId } = tutorial.data;
+
+const schema = {
+  "@type": "HowTo",
+  "@id": `https://ajcreates.dev${BASE}/tutorials/${tutorial.slug}/#howto`,
+  "name": title,
+  "description": description,
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+  "tool": [{ "@type": "HowToTool", "name": "Standard deck of playing cards" }],
+  "supply": [{ "@type": "HowToSupply", "name": "52-card deck" }],
+  ...(youtubeId ? {
+    "video": {
+      "@type": "VideoObject",
+      "name": title,
+      "embedUrl": `https://www.youtube.com/embed/${youtubeId}`,
+      "thumbnailUrl": `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+    }
+  } : {}),
+  "author": { "@id": `https://ajcreates.dev${BASE}/#person` },
+};
+---
+
+<BaseLayout title={title} description={description} type="article" schema={schema}>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
+      <a href={BASE + '/'} class="hover:text-brand-500 transition-colors">Home</a>
+      <span class="mx-2">›</span>
+      <a href={BASE + '/tutorials'} class="hover:text-brand-500 transition-colors">Tutorials</a>
+      <span class="mx-2">›</span>
+      <span class="text-gray-300">{title}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-10">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span class={`tag tag-difficulty-${difficulty} capitalize`}>{difficulty}</span>
+        <span class="text-gray-500 text-sm">⏱ {duration}</span>
+        <time class="text-gray-500 text-sm" datetime={publishedAt}>
+          {new Date(publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+      </div>
+      <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-4 leading-tight">{title}</h1>
+      <p class="text-xl text-gray-400 leading-relaxed">{description}</p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        {tags.map(tag => <span class="tag">{tag}</span>)}
+      </div>
+    </header>
+
+    <!-- YouTube embed -->
+    {youtubeId && (
+      <div class="mb-10 rounded-xl overflow-hidden aspect-video bg-dark-700">
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}`}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="w-full h-full"
+          loading="lazy"
+        ></iframe>
+      </div>
+    )}
+
+    <!-- Tutorial content -->
+    <article class="prose prose-invert prose-brand max-w-none
+      prose-headings:font-display prose-headings:text-white
+      prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4
+      prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+      prose-p:text-gray-300 prose-p:leading-relaxed
+      prose-a:text-brand-500 prose-a:no-underline hover:prose-a:text-brand-400
+      prose-strong:text-white
+      prose-blockquote:border-brand-500 prose-blockquote:bg-dark-800 prose-blockquote:rounded-r-lg prose-blockquote:py-2
+      prose-code:text-brand-400 prose-code:bg-dark-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+      prose-ul:text-gray-300 prose-ol:text-gray-300
+      prose-table:text-gray-300 prose-th:text-white prose-th:bg-dark-700
+      prose-hr:border-dark-700
+    ">
+      <Content />
+    </article>
+
+    <!-- Back link -->
+    <div class="mt-16 pt-8 border-t border-dark-700">
+      <a href={BASE + '/tutorials'} class="btn-secondary">
+        ← Back to Tutorials
+      </a>
+    </div>
+  </div>
+</BaseLayout>

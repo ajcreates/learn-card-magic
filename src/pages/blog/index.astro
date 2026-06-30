@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+import { BASE } from '../../lib/base';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime());
+
+const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
+
+const schema = {
+  "@type": "Blog",
+  "@id": `https://ajcreates.dev${BASE}/blog/#webpage`,
+  "url": `https://ajcreates.dev${BASE}/blog/`,
+  "name": "Card Magic Blog",
+  "description": "Articles, tips, theory, and insights about card magic by AJCreates.",
+  "isPartOf": { "@id": `https://ajcreates.dev${BASE}/#website` },
+  "author": { "@id": `https://ajcreates.dev${BASE}/#person` },
+};
+---
+
+<BaseLayout
+  title="Blog"
+  description="Card magic articles, tips, theory, and insights. Learn the psychology of magic, choose your first deck, and more."
+  schema={schema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-16">
+      <h1 class="font-display text-5xl font-black text-white mb-4">Card Magic Blog</h1>
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+        Theory, tips, gear recommendations, and the art behind the craft.
+      </p>
+    </div>
+
+    <!-- Tag filter (static — no JS needed, just anchor links) -->
+    <div class="flex flex-wrap gap-2 justify-center mb-12">
+      {allTags.map(tag => (
+        <span class="tag cursor-default">{tag}</span>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map(p => (
+        <BlogCard
+          title={p.data.title}
+          description={p.data.description}
+          tags={p.data.tags}
+          publishedAt={p.data.publishedAt}
+          readTime={p.data.readTime}
+          slug={p.slug}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

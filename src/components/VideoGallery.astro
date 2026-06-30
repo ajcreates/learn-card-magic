@@ -1,0 +1,174 @@
+---
+interface Video {
+  slug: string;
+  youtubeId: string;
+  title: string;
+  description: string;
+  tags: string[];
+  difficulty?: string;
+  viewCount?: number;
+  publishedAt: string;
+}
+interface Props {
+  videos: Video[];
+}
+const { videos } = Astro.props;
+const allTags = [...new Set(videos.flatMap(v => v.tags))].sort();
+const allDifficulties = ['beginner', 'intermediate', 'advanced'];
+---
+
+<div x-data="videoGallery()" x-init="init()">
+  <!-- Controls -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-8">
+    <!-- Search -->
+    <div class="relative flex-1">
+      <input
+        type="text"
+        x-model="search"
+        @input="filter()"
+        placeholder="Search videos…"
+        class="w-full bg-dark-800 border border-dark-600 text-white placeholder-gray-500 rounded-lg px-4 py-3 pl-10 focus:outline-none focus:border-brand-500 transition-colors"
+      />
+      <svg class="absolute left-3 top-3.5 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+    </div>
+
+    <!-- Sort -->
+    <select
+      x-model="sort"
+      @change="filter()"
+      class="bg-dark-800 border border-dark-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500 transition-colors"
+    >
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="views">Most Viewed</option>
+      <option value="title">A–Z</option>
+    </select>
+  </div>
+
+  <!-- Tag filters -->
+  <div class="flex flex-wrap gap-2 mb-4">
+    <button
+      @click="activeTag = ''; filter()"
+      :class="activeTag === '' ? 'bg-brand-500 text-dark-900' : 'bg-dark-700 text-gray-300 hover:bg-dark-600'"
+      class="px-3 py-1 rounded-full text-sm font-medium transition-colors"
+    >All</button>
+    {allTags.map(tag => (
+      <button
+        @click={`activeTag = '${tag}'; filter()`}
+        :class={`activeTag === '${tag}' ? 'bg-brand-500 text-dark-900' : 'bg-dark-700 text-gray-300 hover:bg-dark-600'`}
+        class="px-3 py-1 rounded-full text-sm font-medium transition-colors"
+      >{tag}</button>
+    ))}
+  </div>
+
+  <!-- Difficulty filters -->
+  <div class="flex flex-wrap gap-2 mb-8">
+    <button
+      @click="activeDifficulty = ''; filter()"
+      :class="activeDifficulty === '' ? 'border-brand-500 text-brand-500' : 'border-dark-600 text-gray-400 hover:border-gray-500'"
+      class="px-3 py-1 rounded-full text-sm border transition-colors"
+    >Any Level</button>
+    {allDifficulties.map(d => (
+      <button
+        @click={`activeDifficulty = '${d}'; filter()`}
+        :class={`activeDifficulty === '${d}' ? 'border-brand-500 text-brand-500' : 'border-dark-600 text-gray-400 hover:border-gray-500'`}
+        class={`px-3 py-1 rounded-full text-sm border transition-colors capitalize`}
+      >{d}</button>
+    ))}
+  </div>
+
+  <!-- Results count -->
+  <p class="text-gray-500 text-sm mb-6" x-text="`Showing ${filtered.length} of ${videos.length} videos`"></p>
+
+  <!-- Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="video-grid">
+    <template x-for="video in filtered" :key="video.slug">
+      <a :href="`/learn-card-magic/videos/${video.slug}`" class="card group flex flex-col h-full hover:shadow-lg hover:shadow-brand-500/10 transition-all">
+        <div class="relative overflow-hidden aspect-video bg-dark-700">
+          <img
+            :src="ytThumb(video.youtubeId)"
+            :alt="video.title"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+            <div class="w-14 h-14 bg-brand-500 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-dark-900 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <span
+            x-show="video.difficulty"
+            :class="`absolute top-2 left-2 text-xs px-2 py-1 rounded-full font-medium tag-difficulty-${video.difficulty}`"
+            x-text="video.difficulty"
+          ></span>
+        </div>
+        <div class="p-4 flex flex-col flex-1">
+          <h3 class="font-display font-bold text-white group-hover:text-brand-500 transition-colors leading-tight mb-2" x-text="video.title"></h3>
+          <p class="text-gray-400 text-sm flex-1 line-clamp-2 leading-relaxed" x-text="video.description"></p>
+          <div class="flex flex-wrap gap-1 mt-3">
+            <template x-for="tag in video.tags.slice(0,3)" :key="tag">
+              <span class="tag" x-text="tag"></span>
+            </template>
+          </div>
+          <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+            <span x-text="new Date(video.publishedAt).toLocaleDateString('en-US', {year:'numeric',month:'short',day:'numeric'})"></span>
+            <span x-show="video.viewCount" x-text="`👁 ${new Intl.NumberFormat().format(video.viewCount)} views`"></span>
+          </div>
+        </div>
+      </a>
+    </template>
+  </div>
+
+  <!-- Empty state -->
+  <div x-show="filtered.length === 0" class="text-center py-20 text-gray-500">
+    <p class="text-5xl mb-4">🃏</p>
+    <p class="text-lg">No videos match your search.</p>
+    <button @click="search=''; activeTag=''; activeDifficulty=''; filter()" class="mt-4 text-brand-500 hover:text-brand-400 transition-colors">Clear filters</button>
+  </div>
+</div>
+
+<script define:vars={{ videos }}>
+  function videoGallery() {
+    return {
+      videos,
+      filtered: [],
+      search: '',
+      sort: 'newest',
+      activeTag: '',
+      activeDifficulty: '',
+      init() {
+        // Initialize search from URL query param
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('search')) this.search = params.get('search');
+        this.filter();
+      },
+      ytThumb(id) {
+        // Use hqdefault which always exists (maxresdefault 404s for older/short videos)
+        return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+      },
+      filter() {
+        let result = [...this.videos];
+        if (this.search) {
+          const q = this.search.toLowerCase();
+          result = result.filter(v =>
+            v.title.toLowerCase().includes(q) ||
+            v.description.toLowerCase().includes(q) ||
+            v.tags.some(t => t.toLowerCase().includes(q))
+          );
+        }
+        if (this.activeTag) result = result.filter(v => v.tags.includes(this.activeTag));
+        if (this.activeDifficulty) result = result.filter(v => v.difficulty === this.activeDifficulty);
+        if (this.sort === 'newest') result.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+        else if (this.sort === 'oldest') result.sort((a, b) => new Date(a.publishedAt) - new Date(b.publishedAt));
+        else if (this.sort === 'views') result.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+        else if (this.sort === 'title') result.sort((a, b) => a.title.localeCompare(b.title));
+        this.filtered = result;
+      }
+    };
+  }
+  document.addEventListener('alpine:init', () => {
+    window.Alpine.data('videoGallery', videoGallery);
+  });
+</script>
