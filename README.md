@@ -2,7 +2,7 @@
 
 > **https://ajcreates.dev/learn-card-magic**
 
-A static Astro site for learning card magic — tutorials, blog posts, and a searchable video gallery.
+A static Astro site for beginners learning card magic with tutorials, blog posts, and a searchable video gallery. A corresponding YouTube channel with performance videos is also linked.
 
 ## Setup
 
