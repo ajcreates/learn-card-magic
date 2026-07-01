@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+import { BASE } from '../../lib/base';
+
+const post = await getEntry('blog', 'sample-post');
+const { Content } = await post.render();
+const { title, description, tags, publishedAt, readTime } = post.data;
+
+const schema = {
+  "@type": "BlogPosting",
+  "@id": `https://ajcreates.dev${BASE}/blog/sample-post/#article`,
+  "headline": title,
+  "description": description,
+  "datePublished": publishedAt,
+  "url": `https://ajcreates.dev${BASE}/blog/sample-post/`,
+  "author": { "@id": `https://ajcreates.dev${BASE}/#person` },
+  "publisher": { "@id": `https://ajcreates.dev${BASE}/#person` },
+  "isPartOf": { "@id": `https://ajcreates.dev${BASE}/#website` },
+  "keywords": tags.join(', '),
+};
+---
+
+<BaseLayout title={title} description={description} type="article" schema={schema}>
+  <div class="max-w-2xl mx-auto px-6 sm:px-8 py-16">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-10">
+      <a href={`${BASE}/`} class="hover:text-brand-500 transition-colors">Home</a>
+      <span class="mx-2">›</span>
+      <a href={`${BASE}/blog`} class="hover:text-brand-500 transition-colors">Blog</a>
+      <span class="mx-2">›</span>
+      <span class="text-gray-400">{title}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-12">
+      <div class="flex flex-wrap gap-2 mb-5">
+        {tags.map((tag: string) => <span class="tag">{tag}</span>)}
+      </div>
+      <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-5 leading-tight tracking-tight">
+        {title}
+      </h1>
+      <p class="text-xl text-gray-400 leading-relaxed mb-6 font-light">
+        {description}
+      </p>
+      <div class="flex items-center gap-3 text-sm text-gray-500 border-t border-dark-700 pt-5">
+        <time datetime={publishedAt}>
+          {new Date(publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        {readTime && <><span>·</span><span>{readTime} min read</span></>}
+      </div>
+    </header>
+
+    <!-- Article body -->
+    <article class="blog-body">
+      <Content />
+    </article>
+
+    <div class="mt-16 pt-8 border-t border-dark-700">
+      <a href={`${BASE}/blog`} class="btn-secondary">← Back to Blog</a>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Typography ─────────────────────────────────────────────── */
+  .blog-body {
+    color: #d1d5db; /* gray-300 */
+    font-size: 1.125rem;   /* 18px — comfortable reading size */
+    line-height: 1.85;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Paragraphs */
+  .blog-body :global(p) {
+    margin-bottom: 1.6rem;
+    color: #d1d5db;
+  }
+
+  /* H2 — section headers */
+  .blog-body :global(h2) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.75rem;   /* 28px */
+    font-weight: 900;
+    color: #ffffff;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 0.5rem;
+  }
+
+  /* H3 — sub-headers */
+  .blog-body :global(h3) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;   /* 20px */
+    font-weight: 700;
+    color: #e5e7eb;       /* gray-200 — slightly dimmer than h2 */
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+  }
+
+  /* H4 */
+  .blog-body :global(h4) {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #d4a017;       /* brand gold */
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Bold */
+  .blog-body :global(strong) {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Italic */
+  .blog-body :global(em) {
+    color: #e5e7eb;
+    font-style: italic;
+  }
+
+  /* Blockquote — pull quote */
+  .blog-body :global(blockquote) {
+    border-left: 3px solid #d4a017;
+    background: #1a1a1a;
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+  .blog-body :global(blockquote p) {
+    margin: 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #f3f4f6;
+    line-height: 1.7;
+  }
+
+  /* Unordered lists */
+  .blog-body :global(ul) {
+    margin: 1.5rem 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .blog-body :global(ul li) {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.6rem;
+    color: #d1d5db;
+  }
+  .blog-body :global(ul li::before) {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #d4a017;
+    font-weight: 600;
+  }
+
+  /* Ordered lists */
+  .blog-body :global(ol) {
+    margin: 1.5rem 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: ol-counter;
+  }
+  .blog-body :global(ol li) {
+    padding-left: 2.25rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+    color: #d1d5db;
+    counter-increment: ol-counter;
+  }
+  .blog-body :global(ol li::before) {
+    content: counter(ol-counter);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: #d4a017;
+    color: #0f0f0f;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Horizontal rule — section divider */
+  .blog-body :global(hr) {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 2.5rem 0;
+  }
+
+  /* Inline code */
+  .blog-body :global(code) {
+    background: #2a2a2a;
+    color: #d4a017;
+    padding: 0.15em 0.45em;
+    border-radius: 0.3rem;
+    font-size: 0.9em;
+  }
+
+  /* Links */
+  .blog-body :global(a) {
+    color: #d4a017;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s;
+  }
+  .blog-body :global(a:hover) {
+    color: #b8860b;
+  }
+</style>
