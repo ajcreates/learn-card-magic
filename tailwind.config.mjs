@@ -25,5 +25,10 @@ export default {
       },
     },
   },
+  safelist: [
+    'tag-difficulty-beginner',
+    'tag-difficulty-intermediate',
+    'tag-difficulty-advanced',
+  ],
   plugins: [],
 };
