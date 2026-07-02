@@ -1,0 +1,398 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BASE } from '../../lib/base';
+
+const title = "The Pinky Break";
+const description = "A foundational skill in any magician's journey, the pinky break allows you to secretly hold a small gap in the deck without the audience noticing. This invisible separation enables clean card controls, lifts, forces, and many essential sleight-of-hand techniques used in beginner and advanced card magic.";
+const difficulty = "beginner";
+const tags = ["sleight-of-hand", "card magic", "mechanics grip", "card control"];
+
+const steps = [
+  {
+    num: 1,
+    title: 'Prepare Your Key Card',
+    action: "Before anyone is watching, secretly glimpse and memorise the top card of the deck — let's say it's the Seven of Hearts. Square the deck casually and set it face-down on the table. This card is your secret anchor for the entire trick.",
+    spectator: "They see you set down an ordinary face-down deck. Nothing has happened yet. The trick hasn't started.",
+    tip: 'Glimpse the card while squaring the deck — tilt the front edge slightly toward you. It takes half a second and looks completely natural.',
+    mistake: "Don't look at the top card by lifting it up or peeling it back. Any unnatural movement before the trick starts is remembered later.",
+    visual: 'Diagram: hand holding deck in dealing grip, slight forward tilt showing top card face toward performer',
+  },
+  {
+    num: 2,
+    title: 'Spread the Cards for Selection',
+    action: "Pick up the deck and spread it face-down in a wide fan toward the spectator. Ask them to point to or pull out any card they like. Tell them to remember it clearly and show it to anyone else watching. Do not look at it yourself.",
+    spectator: "A wide, even fan of cards. A completely free choice. You look away while they look at their card — everything feels open and fair.",
+    tip: 'Keep the fan even and loose — a tight or uneven fan makes it harder for them to take a card cleanly and can create suspicion.',
+    mistake: 'Avoid forcing where they select from. Let the fan be genuinely open. The freedom of selection is what makes this trick feel impossible later.',
+    visual: "Diagram: wide face-down fan spread between both hands, spectator's hand reaching in",
+  },
+  {
+    num: 3,
+    title: 'Cut the Deck While They Look',
+    action: "While the spectator's attention is fully on their card, casually cut the top packet of the deck to the bottom with one smooth motion. This moves your key card — previously on top — to the middle of the deck.",
+    spectator: "You're standing back, not looking at their card, hands moving only to straighten the deck. Nothing seems deliberate.",
+    tip: '"Take a good look, show your friends." The cut happens while they\'re focused elsewhere.',
+    mistake: 'A fast or snapping cut looks like something. One slow, deliberate squaring motion is invisible. Slow = safe.',
+    visual: 'Diagram: left hand holding bottom half, right hand placing top half underneath in one fluid motion',
+  },
+  {
+    num: 4,
+    title: 'Receive the Card and Control It',
+    action: 'Ask them to place their card face-down on top of the deck. Now perform a single casual overhand shuffle: run cards off the top one at a time until you spot your key card appear — then drop all remaining cards on top in one block. The selected card is now secretly sitting right below your key card.',
+    spectator: 'They see their card go into the top of the deck, then a quick mix. Their card is now "lost." Or so they think.',
+    tip: 'Practise this shuffle until the pause at the key card is invisible — it should feel like a continuous, unbroken shuffle to an observer.',
+    mistake: 'Many beginners shuffle too many times trying to look convincing. One shuffle is more convincing than three. Overdoing it signals nerves.',
+    visual: 'Diagram: overhand shuffle position, key card highlighted mid-deck, selected card directly below it',
+  },
+  {
+    num: 5,
+    title: 'Secretly Reverse the Bottom Card',
+    action: 'Hold the deck face-down in your left hand in dealing grip. Bring your right hand over the deck to "square" it. As you do, your right thumb secretly levers the bottom card face-up beneath the pack. The deck now has a hidden face-up card at the bottom. To the audience, nothing has changed.',
+    spectator: "You're squaring the deck — a completely normal, purposeless-looking action that magicians do all the time. Nothing to see here.",
+    tip: "The cover action of squaring gives your thumb all the time it needs. The move is not fast — it's hidden by the natural gesture, not by speed.",
+    mistake: "Gripping the deck tightly causes the sides to gap, revealing the reversed card's edge. Maintain a loose, relaxed grip throughout.",
+    visual: "Diagram: cross-section of deck showing face-up bottom card, right thumb position at back edge",
+  },
+  {
+    num: 6,
+    title: 'Turn the Deck Over Cleanly',
+    action: 'Now turn the entire deck face-up in your hands, holding it from both ends. Because the bottom card (now secretly face-down) is on the face of the deck as you hold it face-up, the deck appears to be a normal face-up spread. Say something like "Every card in this deck is showing its face — except one."',
+    spectator: 'The deck looks completely normal face-up. They have no idea one card at the bottom is secretly reversed and will soon be the only face-down card in a face-up spread.',
+    tip: 'As you turn the deck, make eye contact with the spectator — not your hands. Confidence and eye contact sell the moment.',
+    mistake: 'Flashing the bottom of the deck as you turn it. Turn from the ends, keeping both faces of the deck away from spectators during the rotation.',
+    visual: 'Diagram: arrows showing deck rotation from face-down to face-up, maintaining hidden reversed bottom card',
+  },
+  {
+    num: 7,
+    title: 'Spread and Reveal',
+    action: "Spread the deck slowly face-up across the table in a long ribbon spread. Every single card is face-up — except one mysterious face-down card somewhere in the middle. Let everyone look. Point to it. Ask the spectator to name their card out loud for the first time. Then flip it over. It's their card.",
+    spectator: 'A sea of face-up cards with one impossible face-down card sitting alone in the middle. Before you even flip it, the room knows. The reaction usually starts before the reveal.',
+    tip: 'Spread slowly and deliberately. Let them see every face-up card. The longer the spread takes, the longer the tension builds. Pause after pointing to the face-down card before asking them to name it.',
+    mistake: "Flipping the card immediately. Make them name their card first, while the face-down card is still a mystery. This order of events is everything — it eliminates any possibility of a switch in their mind.",
+    visual: 'Diagram: ribbon spread across table showing all face-up cards with single face-down card highlighted in the centre',
+  },
+];
+
+const ratings = [
+  { label: 'Technical Difficulty', score: 2, max: 5, note: 'The overhand control and bottom reverse are both learnable in an afternoon', color: 'bg-green-500' },
+  { label: 'Audience Impact',      score: 5, max: 5, note: 'Consistently one of the strongest reactions in close-up card magic', color: 'bg-brand-500' },
+  { label: 'Memorability',         score: 5, max: 5, note: 'Spectators bring this one up months later — "that trick with the one face-down card"', color: 'bg-brand-500' },
+  { label: 'Impromptu-Friendly',   score: 5, max: 5, note: 'Any borrowed deck, any flat surface, any time — zero setup required', color: 'bg-green-500' },
+  { label: 'Reset Speed',          score: 5, max: 5, note: 'Resets in seconds — you can perform it again immediately for a new group', color: 'bg-green-500' },
+];
+
+const recovery = [
+  { problem: 'The reversed card flashes during the turnover', fix: 'Keep your turn smooth and look at the spectator during the move. If it flashes, calmly square the deck and say "let me do that again properly" — most audiences accept a reset without suspicion.' },
+  { problem: 'You lose track of your key card during the shuffle', fix: 'Ask them to cut the deck once more — "just to be completely fair." This gives you a chance to spot your key card as the packets separate.' },
+  { problem: 'The spectator puts their card back in a different position', fix: "If they don't put it on top as instructed, use an overhand shuffle to control it anyway — injog it as you shuffle. Practise the injog control as a companion skill." },
+  { problem: 'Two face-down cards appear in the spread', fix: 'This means your key card ended up reversed too. Stay calm — point to the correct one (which you know) and proceed normally. Nobody saw the setup.' },
+];
+
+const schema = {
+  "@type": "HowTo",
+  "@id": `https://ajcreates.dev${BASE}/tutorials/pinky-break/#howto`,
+  "name": title,
+  "description": description,
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+  "tool": [{ "@type": "HowToTool", "name": "Standard deck of playing cards" }],
+  "supply": [{ "@type": "HowToSupply", "name": "52-card deck" }],
+  "author": { "@id": `https://ajcreates.dev${BASE}/#person` },
+};
+---
+
+<BaseLayout title={title} description={description} type="article" schema={schema}>
+  <div id="progress-bar" class="fixed top-16 left-0 h-1 bg-brand-500 z-40 transition-all duration-100" style="width:0%"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="tutorialPage()" x-init="init()">
+
+    <!-- Mobile jump-to -->
+    <div class="lg:hidden mb-6">
+      <label class="text-gray-400 text-sm mb-1 block">Jump to section</label>
+      <select @change="scrollTo($event.target.value)" class="w-full bg-dark-800 border border-dark-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500">
+        <option value="">— Select a section —</option>
+        <option value="effect">🎩 The Effect</option>
+        <option value="requirements">🃏 What You'll Need</option>
+        <option value="steps">📋 Step-by-Step Instructions</option>
+        <option value="performance">🎭 Performance Tips</option>
+        <option value="practice">🏋️ Practice Progression</option>
+        <option value="ratings">⭐ Difficulty Breakdown</option>
+        <option value="next">➡️ What's Next</option>
+      </select>
+    </div>
+
+    <div class="flex gap-10">
+
+      <!-- Sidebar ToC -->
+      <aside class="hidden lg:block w-56 shrink-0">
+        <div class="sticky top-24 space-y-1">
+          <p class="text-xs uppercase tracking-widest text-gray-500 mb-3 font-semibold">Contents</p>
+          {[
+            ['effect','🎩 The Effect'],
+            ['requirements',"🃏 What You'll Need"],
+            ['steps','📋 Steps'],
+            ['performance','🎭 Performance Tips'],
+            ['practice','🏋️ Practice Progression'],
+            ['ratings','⭐ Difficulty'],
+            ['next',"➡️ What's Next"],
+          ].map(([id,label]) => (
+            <a href={`#${id}`} class="block text-sm text-gray-400 hover:text-brand-500 transition-colors py-1 pl-3 border-l-2 border-transparent hover:border-brand-500">{label}</a>
+          ))}
+        </div>
+      </aside>
+
+      <main class="flex-1 min-w-0">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-gray-500 mb-6">
+          <a href={`${BASE}/`} class="hover:text-brand-500 transition-colors">Home</a>
+          <span class="mx-2">›</span>
+          <a href={`${BASE}/tutorials`} class="hover:text-brand-500 transition-colors">Tutorials</a>
+          <span class="mx-2">›</span>
+          <span class="text-gray-300">{title}</span>
+        </nav>
+
+        <!-- Header -->
+        <header class="mb-10">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="tag tag-difficulty-beginner capitalize">Beginner</span>
+            <span class="text-gray-500 text-sm">🃏 7 Steps</span>
+          </div>
+          <h1 class="font-display text-4xl sm:text-5xl font-black text-white mb-4 leading-tight">{title}</h1>
+          <p class="text-xl text-gray-400 leading-relaxed max-w-2xl">{description}</p>
+          <div class="flex flex-wrap gap-2 mt-5">
+            {tags.map(tag => <span class="tag">{tag}</span>)}
+          </div>
+        </header>
+
+        <!-- THE EFFECT -->
+        <section id="effect" class="mb-4">
+          <button @click="toggle('effect')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">🎩 The Effect</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.effect?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.effect" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6">
+            <p class="text-xs uppercase tracking-widest text-gray-500 mb-3 font-semibold">What the audience sees</p>
+            <p class="text-lg text-gray-300 leading-loose mb-4">The magician has a spectator freely select a card and lose it in the middle of the deck. Despite the card being fairly returned and seemingly shuffled into the pack, the magician is still able to instantly locate it in a clean reveal.</p>
+          </div>
+        </section>
+
+        <!-- WHAT YOU'LL NEED -->
+        <section id="requirements" class="mb-4">
+          <button @click="toggle('requirements')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">🃏 What You'll Need</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.requirements?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.requirements" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6">
+            <ul class="space-y-3">
+              {['A standard 52-card deck', 'A flat practice surface'].map(item => (
+                <li class="flex items-start gap-3 text-gray-300 text-lg leading-relaxed">
+                  <span class="text-brand-500 mt-1 shrink-0">✅</span><span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <!-- STEPS -->
+        <section id="steps" class="mb-4">
+          <button @click="toggle('steps')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">📋 Step-by-Step Instructions</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.steps?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.steps" x-transition class="mt-3 space-y-4">
+            {steps.map(step => (
+              <div class="bg-dark-800 border border-dark-700 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-4 px-6 py-4 border-b border-dark-700">
+                  <div class="w-10 h-10 rounded-full bg-brand-500 text-dark-900 font-display font-black text-lg flex items-center justify-center shrink-0">{step.num}</div>
+                  <h3 class="font-display text-xl font-bold text-white">{step.title}</h3>
+                </div>
+                <div class="p-6 space-y-4">
+                  <p class="text-gray-300 text-lg leading-loose">{step.action}</p>
+                  <div class="rounded-lg border-2 border-dashed border-dark-600 bg-dark-900/50 flex flex-col items-center justify-center py-10 gap-2">
+                    <span class="text-4xl">🖼️</span>
+                    <p class="text-gray-500 text-sm font-medium text-center px-4">[ Visual aid: {step.visual} ]</p>
+                  </div>
+                  <div class="bg-blue-900/20 border border-blue-700/40 rounded-lg px-5 py-4">
+                    <p class="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-2">👁 What the spectator sees</p>
+                    <p class="text-blue-100/80 text-base leading-relaxed">{step.spectator}</p>
+                  </div>
+                  <div class="bg-brand-500/10 border border-brand-500/30 rounded-lg px-5 py-4">
+                    <p class="text-brand-500 text-xs font-semibold uppercase tracking-widest mb-2">💡 Pro Tip</p>
+                    <p class="text-gray-300 text-base leading-relaxed">{step.tip}</p>
+                  </div>
+                  <div class="bg-red-900/20 border border-red-700/40 rounded-lg px-5 py-4">
+                    <p class="text-red-400 text-xs font-semibold uppercase tracking-widest mb-2">⚠️ Common Mistake</p>
+                    <p class="text-red-100/80 text-base leading-relaxed">{step.mistake}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- PERFORMANCE TIPS -->
+        <section id="performance" class="mb-4">
+          <button @click="toggle('performance')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">🎭 Performance Tips</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.performance?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.performance" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6 space-y-6">
+
+            <div>
+              <h4 class="font-semibold text-white mb-4 text-lg">Body language & presence</h4>
+              <ul class="space-y-3">
+                {[
+                  'Keep the deck at chest or mid-torso height to reduce the audience\'s viewing angle',
+                  'Avoid staring at the deck — keep your focus on the spectator to direct attention away from your hands',
+                  'Keep your movements slow, natural, and consistent with the rest of your performance',
+                  'A smaller, relaxed break is always more deceptive than a large or tense one',
+                ].map(item => (
+                  <li class="flex gap-3 text-gray-300 text-base leading-relaxed">
+                    <span class="text-brand-500 shrink-0 mt-1">•</span><span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="h-px bg-dark-600"></div>
+
+            <div>
+              <h4 class="font-semibold text-white mb-4 text-lg">If something goes wrong</h4>
+              <div class="space-y-3">
+                {recovery.map(({ problem, fix }) => (
+                  <div class="bg-dark-800 rounded-lg px-5 py-4">
+                    <p class="text-yellow-400 text-sm font-semibold mb-1">❓ {problem}</p>
+                    <p class="text-gray-300 text-base leading-relaxed">{fix}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- PRACTICE PROGRESSION -->
+        <section id="practice" class="mb-4">
+          <button @click="toggle('practice')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">🏋️ Practice Progression</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.practice?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.practice" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6">
+            <p class="text-gray-400 text-sm mb-5">Check off each stage as you complete it — your progress is saved automatically.</p>
+            <div class="space-y-4">
+              {[
+                ['stage1','Stage 1 — Master the mechanics','Start by practising each step individually until it feels natural. Focus first on a comfortable mechanics grip and a consistent ability to maintain a tiny, invisible break.'],
+                ['stage2','Stage 2 — Add patter and timing','Once comfortable, practise while speaking out loud to simulate real performance conditions. This helps build timing, confidence, and natural misdirection.'],
+                ['stage3','Stage 3 — Perform for real spectators','Perform the full sequence as part of a simple card trick for real spectators. As you improve, try performing for different angles and small groups to strengthen your handling under pressure.'],
+              ].map(([key, label, desc]) => (
+                <label class="flex items-start gap-4 cursor-pointer group">
+                  <input type="checkbox" x-bind:checked={`practice.${key}`} x-on:change={`togglePractice('${key}')`} class="mt-1 w-5 h-5 rounded border-dark-500 bg-dark-700 text-brand-500 focus:ring-brand-500 cursor-pointer shrink-0 accent-yellow-500"/>
+                  <div>
+                    <p class="text-white font-semibold text-base group-hover:text-brand-500 transition-colors">{label}</p>
+                    <p class="text-gray-400 text-sm mt-0.5 leading-relaxed">{desc}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+            <div class="mt-6">
+              <div class="flex justify-between text-xs text-gray-500 mb-1.5">
+                <span>Your progress</span>
+                <span x-text="`${Object.values(practice).filter(Boolean).length} / 3 stages complete`"></span>
+              </div>
+              <div class="h-2.5 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-brand-500 rounded-full transition-all duration-500" :style="`width:${(Object.values(practice).filter(Boolean).length/3)*100}%`"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DIFFICULTY BREAKDOWN -->
+        <section id="ratings" class="mb-4">
+          <button @click="toggle('ratings')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">⭐ Difficulty Breakdown</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.ratings?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.ratings" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6 space-y-5">
+            {ratings.map(({ label, score, max, note, color }) => (
+              <div>
+                <div class="flex justify-between items-baseline mb-2">
+                  <span class="text-white font-semibold text-base">{label}</span>
+                  <span class="text-gray-400 text-sm">{score} / {max}</span>
+                </div>
+                <div class="h-3 bg-dark-700 rounded-full overflow-hidden">
+                  <div class={`h-full rounded-full ${color}`} style={`width:${(score/max)*100}%`}></div>
+                </div>
+                <p class="text-gray-500 text-sm mt-1.5">{note}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- WHAT'S NEXT -->
+        <section id="next" class="mb-4">
+          <button @click="toggle('next')" class="w-full flex items-center justify-between bg-dark-800 border border-dark-600 rounded-xl px-6 py-4 hover:border-brand-500 transition-colors group">
+            <span class="font-display text-xl font-bold text-white group-hover:text-brand-500 transition-colors">➡️ What's Next</span>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="open.next?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open.next" x-transition class="mt-3 bg-dark-800/50 border border-dark-700 rounded-xl p-6">
+            <p class="text-gray-400 mb-5 text-base">Now that you can hold a secret break, these techniques build directly on that skill:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { title:'The Double Lift', slug:'double-lift', difficulty:'beginner', desc:'Use your pinky break to cleanly turn two cards as one — the most important sleight in card magic.' },
+                { title:'Top/Bottom Force', slug:'top-bottom-force', difficulty:'intermediate', desc:'Control which card a spectator selects using a break and a convincing false cut.' },
+              ].map(({ title: t, slug: s, difficulty: d, desc }) => (
+                <a href={`${BASE}/tutorials/${s}`} class="card p-4 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/10 transition-all group">
+                  <div class="flex items-center gap-2 mb-2">
+                    <p class="font-display font-bold text-white group-hover:text-brand-500 transition-colors">{t}</p>
+                    <span class={`tag tag-difficulty-${d} capitalize text-xs shrink-0`}>{d}</span>
+                  </div>
+                  <p class="text-gray-400 text-sm leading-relaxed">{desc}</p>
+                  <p class="text-brand-500 text-sm mt-3 font-medium">Learn this trick →</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div class="mt-10 pt-8 border-t border-dark-700">
+          <a href={`${BASE}/tutorials`} class="btn-secondary">← Back to Tutorials</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  window.addEventListener('scroll', () => {
+    const bar = document.getElementById('progress-bar');
+    if (!bar) return;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = `${(window.scrollY / docHeight) * 100}%`;
+  });
+
+  function tutorialPage() {
+    const KEY = 'tutorial-pinky-break';
+    return {
+      open: { effect:true, requirements:true, steps:true, performance:true, practice:true, ratings:true, next:true },
+      practice: { stage1:false, stage2:false, stage3:false },
+      init() {
+        const saved = localStorage.getItem(KEY);
+        if (saved) this.practice = JSON.parse(saved);
+      },
+      toggle(s) { this.open[s] = !this.open[s]; },
+      togglePractice(key) {
+        this.practice[key] = !this.practice[key];
+        localStorage.setItem(KEY, JSON.stringify(this.practice));
+      },
+      scrollTo(id) {
+        if (!id) return;
+        document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' });
+      },
+    };
+  }
+
+  document.addEventListener('alpine:init', () => {
+    window.Alpine.data('tutorialPage', tutorialPage);
+  });
+</script>

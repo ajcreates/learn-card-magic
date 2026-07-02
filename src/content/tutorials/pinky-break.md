@@ -1,8 +1,8 @@
 ---
 title: "The Pinky Break"
-description: "Master the Pinky Break — the essential card magic technique for secretly holding a break in the deck with your little finger, enabling clean controls, forces, and double lifts."
+description: "A foundational skill in any magician's journey, the pinky break allows you to secretly hold a small gap in the deck without the audience noticing. This invisible separation enables clean card controls, lifts, forces, and many essential sleight-of-hand techniques used in beginner and advanced card magic."
 difficulty: "beginner"
-tags: ["pinky break", "beginner", "sleight of hand", "foundation", "card control"]
+tags: ["sleight-of-hand", "card magic", "mechanics grip", "card control"]
 publishedAt: "2026-07-01"
 duration: "20 minutes"
 ---
