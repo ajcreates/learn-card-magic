@@ -1,7 +1,7 @@
 ---
 title: "Top/Bottom Force"
 description: "Learn the Top/Bottom Force — a subtle and powerful way to control which card a spectator 'freely' selects from either the top or bottom of the deck."
-difficulty: "intermediate"
+difficulty: "beginner"
 tags: ["force", "intermediate", "card control", "sleight of hand"]
 duration: "20 minutes"
 publishedAt: "2026-06-30"
